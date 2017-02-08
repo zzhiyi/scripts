@@ -24,11 +24,13 @@ if [ -z ${PACKAGES_DIR} ] || [ ! -e ${PACKAGES_DIR} ]; then
 	exit 2;
 fi
 
-inotifywait -r -m ${PACKAGES_DIR} -e modify -e move -e create -e delete |
+/usr/local/bin/inotifywait -r -m ${PACKAGES_DIR} -e modify -e move -e create -e delete |
     while read path action file; do
         echo "${path} {$action} ${file}" | tee -a ${LOG_FILE}
-        ret=createrepo --update ${REPO_DIR} | tee -a ${LOG_FILE}
-        if [ ${ret} -ne 0 ];then
-		${ALERT_SCRIPT} "WARNING: ${THIS_CMD} createrepo return $ret" $(tail -n 20 ${LOG_FILE})
+        sleep 15
+        /usr/bin/createrepo --update ${REPO_DIR} | tee -a ${LOG_FILE}
+        ret=$?
+        if [ ${ret} -ne 0 ] ;then
+		${ALERT_SCRIPT} "WARNING: ${THIS_CMD} createrepo return $ret $(tail -n 20 ${LOG_FILE})"
 	fi
     done
