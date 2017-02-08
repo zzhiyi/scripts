@@ -3,6 +3,8 @@ Description=Auto update staging repo x86_64
 
 [Service]
 ExecStart=/home/y/auto-update-repo.sh /data/www/zzy/staging/repo/NSDL-V3/x86_64
+ExecStartPost=/home/y/alert-wechat.sh Auto update staging repo x86_64 started
+ExecStopPost=/home/y/alert-wechat.sh Auto update staging repo x86_64 stopped
 
 [Install]
 WantedBy=default.target

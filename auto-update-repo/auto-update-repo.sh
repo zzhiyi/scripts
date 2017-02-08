@@ -11,7 +11,7 @@ LOG_FILE=/home/y/auto-update-repo.log
 ALERT_SCRIPT=/home/y/alert-wechat.sh
 
 function finish {
-  ${ALERT_SCRIPT} "ALERT:${THIS_CMD} exited"
+  ${ALERT_SCRIPT} "ALERT: ${THIS_CMD} exited"
   echo "$(date) ${THIS_CMD} exited"|tee -a ${LOG_FILE}
 }
 trap finish QUIT EXIT INT TERM SIGHUP SIGTERM SIGINT
@@ -29,6 +29,6 @@ inotifywait -r -m ${PACKAGES_DIR} -e modify -e move -e create -e delete |
         echo "${path} {$action} ${file}" | tee -a ${LOG_FILE}
         ret=createrepo --update ${REPO_DIR} | tee -a ${LOG_FILE}
         if [ ${ret} -ne 0 ];then
-		${ALERT_SCRIPT} "WARNING:${THIS_CMD} createrepo return $ret" $(tail -n 20 ${LOG_FILE})
+		${ALERT_SCRIPT} "WARNING: ${THIS_CMD} createrepo return $ret" $(tail -n 20 ${LOG_FILE})
 	fi
     done
